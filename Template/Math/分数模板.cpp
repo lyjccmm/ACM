@@ -6,15 +6,38 @@ using namespace std;
 typedef long long LL;
 struct fract{
 	LL a, b;
-	//fract(){}
-	fract(LL _a=0, LL _b=1):a(_a), b(_b){up(a, b);}
-	void up(LL &a, LL &b){
+	fract(LL _a=0, LL _b=1):a(_a), b(_b){up();upop();}
+	void upop(){
+		if(b < 0) a = -a, b = -b;
+	}
+	void up(){
 		LL g = gcd(a, b);
 		a /= g, b /= g;
 	}
-	fract inv(){return fract(b, a);}
-	LL retLL(){return a/b;}
-	double retDB(){return 1.*a/b;}
+	fract inv() const{return fract(b, a);}
+	LL retLL() const{return a/b;}
+	double retDB() const{return 1.*a/b;}
+	long double retLDB() const{return (long double)a/b;}
+	bool operator < (LL &ot) const{
+		return retLL() < ot;
+	}
+	bool operator == (LL &ot) const{
+		return b == 1 && a == ot;
+	}
+	bool operator > (LL &ot) const{
+		return !(*this < ot || *this == ot);
+	}
+	bool operator < (const fract &ot) const{
+		LL t1 = a*ot.b, t2 = b*ot.a;
+		if(t1 / ot.b == a && t2 / b == ot.a) return t1 < t2;
+		else return this->retLDB() < ot.retLDB();
+	}
+	bool operator == (const fract &ot) const{
+		return a == ot.a && b == ot.b;
+	}
+	bool operator > (const fract &ot) const{
+		return !(*this < ot || *this == ot);
+	}
 	fract operator + (const fract &ot) const{
 		LL g = gcd(b, ot.b);
 		return fract(ot.b/g*a + ot.a/g*b, b/g*ot.b);
@@ -48,7 +71,7 @@ int main(){
 }
 /*
 9/10
-1/-10
+-1/10
 1/5
 4/5
 0.800000
