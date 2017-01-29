@@ -1,18 +1,30 @@
+//http://codeforces.com/problemset/problem/305/B
 #include <cstdio>
 #include <algorithm>
+#include <iostream>
 #define gcd(a, b) (std::__gcd(a, b))
 #define lcm(a, b) (a/gcd(a, b)*b)
 using namespace std;
 typedef long long LL;
+const int N = 110;
 struct fract{
 	LL a, b;
 	fract(LL _a=0, LL _b=1):a(_a), b(_b){up();upop();}
-	void upop(){
+	fract err() const{ //error
+		fract ret;
+		ret.a = 0, ret.b = 0;
+		return ret;
+	}
+	void upop(){ //update_operator
 		if(b < 0) a = -a, b = -b;
 	}
-	void up(){
+	void up(){ //update
 		LL g = gcd(a, b);
 		a /= g, b /= g;
+	}
+	bool of(LL a, LL b) const{ //overflow
+		if(b != 0 && a*b/b != a) return true;
+		else return false;
 	}
 	fract inv() const{return fract(b, a);}
 	LL retLL() const{return a/b;}
@@ -28,8 +40,7 @@ struct fract{
 		return !(*this < ot || *this == ot);
 	}
 	bool operator < (const fract &ot) const{
-		LL t1 = a*ot.b, t2 = b*ot.a;
-		if(t1 / ot.b == a && t2 / b == ot.a) return t1 < t2;
+		if(!of(a, ot.b) && !of(ot.a, b)) return a*ot.b < b*ot.a;
 		else return this->retLDB() < ot.retLDB();
 	}
 	bool operator == (const fract &ot) const{
@@ -38,42 +49,48 @@ struct fract{
 	bool operator > (const fract &ot) const{
 		return !(*this < ot || *this == ot);
 	}
+	fract operator - () const{
+		return fract(-this->a, this->b);
+	}
 	fract operator + (const fract &ot) const{
 		LL g = gcd(b, ot.b);
+		if(of(ot.b/g, a) || of(ot.a/g, b) || of(b/g, ot.b)) return err();
+		LL aa = ot.b/g*a + ot.a/g*b;
+		LL bb = b/g*ot.b;
 		return fract(ot.b/g*a + ot.a/g*b, b/g*ot.b);
 	}
 	fract operator - (const fract &ot) const{
-		LL g = gcd(b, ot.b);
-		return fract(ot.b/g*a - ot.a/g*b, b/g*ot.b);
+		return *this + (-ot);
 	}
 	fract operator * (const fract &ot) const{
 		LL g1 = gcd(a, ot.b), g2 = gcd(b, ot.a);
-		return fract((a/g1)*(ot.a/g2), (b/g2)*(ot.b/g1));
+		if(!of(a/g1, ot.a/g2) && !of(b/g2, ot.b/g1)) return fract((a/g1)*(ot.a/g2), (b/g2)*(ot.b/g1));
+		else return err();
 	}
 	fract operator / (const fract &ot) const{
-		LL g1 = gcd(a, ot.a), g2 = gcd(b, ot.b);
-		return fract((a/g1)*(ot.b/g2), (b/g2)*(ot.a/g1));
+		return *this * ot.inv();
 	}
 };
-int main(){
-	fract a = fract(2, 5);
-	fract b = fract(1, 2);
-	fract c = a + b;
-	fract d = a - b;
-	fract e = a * b;
-	fract f = a / b;
-	printf("%lld/%lld\n", c.a, c.b);
-	printf("%lld/%lld\n", d.a, d.b);
-	printf("%lld/%lld\n", e.a, e.b);
-	printf("%lld/%lld\n", f.a, f.b);
-	printf("%f\n", f.retDB());
-	printf("%lld\n", f.retLL());
+LL p, q;
+int n;
+LL a[N];
+void solve(){
+	fract tmp = fract(p, q);
+	for(int i = 0; i < n; i ++){
+		tmp = tmp - fract(a[i]);
+		if(tmp.b == 0) {
+			puts("NO");
+			return ;
+		}
+		tmp = tmp.inv();
+	}
+	tmp = tmp.inv();
+	if(tmp == 0) puts("YES");
+	else puts("NO");
 }
-/*
-9/10
--1/10
-1/5
-4/5
-0.800000
-0
-*/
+int main(){
+	cin >> p >> q;
+	cin >> n;
+	for(int i = 0; i < n; i ++) cin >> a[i];
+	solve();	
+}
