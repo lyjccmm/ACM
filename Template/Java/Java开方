@@ -1,0 +1,31 @@
+import java.io.*;
+import java.math.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int m = in.nextInt();
+
+        BigDecimal nn = BigDecimal.valueOf(n);
+        BigDecimal rt = BigDecimal.valueOf(Math.sqrt(n));
+
+        for (int i = 0; i < 20; ++ i) {
+            rt = rt.add(nn.divide(rt, m + 5, RoundingMode.HALF_UP));
+            rt = rt.divide(BigDecimal.valueOf(2), m + 5, RoundingMode.HALF_UP);
+        }
+        char[] ch = rt.toString().toCharArray();
+        int p = 0;
+        while (ch[p] != '.') {
+            System.out.print(ch[p ++]);
+        }
+        System.out.print('.');
+        for (int i = 0; i < m; ++ i) {
+            System.out.print(ch[p + 1 + i]);
+        }
+        System.out.println();
+
+        in.close();
+    }
+}
