@@ -1,0 +1,33 @@
+//Arrays结构体排序 
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        new Main().run();
+    }
+
+    class Unit {
+        int x;
+    }
+
+    class Cmp implements Comparator {
+        public int compare(Object a,Object b) {
+            return (int)b - (int)a;
+        }
+    }
+
+    class Unit2 implements Comparable<Unit2> {
+        int x;
+
+        public int compareTo(Unit2 rhs) {
+            return rhs.x - x;
+        }
+    }
+
+    void run() {
+        Unit[] A = new Unit[10];
+        Arrays.sort(A,new Cmp());
+
+        Unit2[] B = new Unit2[10];
+        Arrays.sort(B);
+    }
+}
