@@ -1,0 +1,65 @@
+#include<cstdio>
+#include<cstring>
+#include <queue>
+using namespace std;
+const int N = (int)100 + 5;
+
+struct Trie{
+	static const int kN = N;
+	static const int chN = 26;
+	int next[kN][chN], fail[kN], mark[kN], tot, root;
+	int getNode(){
+		memset(next[tot], -1, sizeof(next[tot]));
+		mark[tot] = 0;
+		return tot ++;
+	}
+	void init(){
+		tot = 0;
+		root = getNode();
+	}
+	void build(bool UpdateMark = false){
+		std::queue <int> que;
+		fail[root] = root;
+		for(int i = 0; i < chN; ++ i){
+			if(next[root][i] == -1) next[root][i] = root;
+			else{
+				fail[next[root][i]] = root;				
+				que.push(next[root][i]);
+			}
+		}
+		int pos;
+		while(!que.empty()){
+			pos = que.front(); que.pop();
+			if(UpdateMark) mark[pos] += mark[fail[pos]];
+			for(int i = 0; i < chN; ++ i){
+				if(next[pos][i] == -1) next[pos][i] = next[fail[pos]][i];
+				else{
+					fail[next[pos][i]] = next[fail[pos]][i];
+					que.push(next[pos][i]);
+				}
+			}
+		}
+	}
+	void insertAlpha(char s[], char ch){
+		int pos = root;
+		for(int i = 0; s[i]; ++ i){
+			if(next[pos][s[i]-ch] == -1) next[pos][s[i]-ch] = getNode();
+			pos = next[pos][s[i]-ch];
+		}
+		++ mark[pos];
+	}
+	int queryAlpha(char s[], char ch){
+		int pos = root, ret = 0, temp;
+		for(int i = 0; s[i]; ++ i){
+			pos = next[pos][s[i]-ch];
+			temp = pos;
+			while(temp != root){
+				ret += mark[temp];
+				mark[temp] = 0;
+				temp = fail[temp];
+			}
+		}
+		return ret;
+	}
+}ac;
+
