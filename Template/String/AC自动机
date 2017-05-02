@@ -2,7 +2,7 @@
 #include<cstring>
 #include <queue>
 using namespace std;
-const int N = (int)100 + 5;
+const int N = (int)1e5 + 5;
 
 struct Trie{
 	static const int kN = N;
