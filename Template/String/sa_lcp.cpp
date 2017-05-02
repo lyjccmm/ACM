@@ -9,7 +9,7 @@ inline int lg2(int x){return !x ? -1 : 31-clz(x);}
 inline int lg2(LL x){return !x ? -1 : 63-clz(x);}
 
 int sa[N], rk[N], h[N], st[20][N];
-void da (char *s,int n,int m) {
+void da (char *s,int n,int m) { //n是s的长度+1,m是字符种类数量,一般128
 	static int t1[N], t2[N], c[N];
 	int *x=t1, *y=t2, i,j,k,p=1;
 	memset (c, 0, sizeof(c[0])*m);
