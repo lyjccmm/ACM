@@ -33,7 +33,7 @@ void fft(Complex *a, int n, int rev) {
         }
     }
     if (rev==-1) {
-        for (int i = 0; i < n; ++ i) real(a[i]) /= n,imag(a[i]) /= n;
+        for (int i = 0; i < n; ++ i) a[i] /= n;
     }
 }
 int main()
