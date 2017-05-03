@@ -12,6 +12,11 @@ const double pi = acos(-1.0);
 const int N = 10000+5;
 const double eps = 1e-6;
 
+inline int clz(int x){return __builtin_clz(x);}
+inline int clz(LL x){return __builtin_clzll(x);}
+inline int lg2(int x){return !x ? -1 : 31-clz(x);}
+inline int lg2(LL x){return !x ? -1 : 63-clz(x);}
+
 void fft(Complex *a, int n, int rev) {
     // n是大于等于相乘的两个数组长度的2的幂次
     // 从0开始表示长度，对a进行操作
