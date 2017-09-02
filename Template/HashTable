@@ -1,0 +1,30 @@
+struct HashTable{
+	static const int kN = 3e6 + 19;
+	static const int MOD = kN;
+	LL num[kN];
+	int head[MOD], nxt[kN];
+	int tot;
+	void init(){
+		memset(head, -1, sizeof(head));
+		tot = 0;
+	}
+	bool find(LL tmp){
+		int t = tmp % MOD;
+		if(t < 0) t += MOD;
+		for(int i = head[t]; ~i; i = nxt[i]){
+			if(num[i] == tmp) return true;
+		}
+		return false;
+	}
+	void qins(LL tmp){
+		int t = tmp % MOD;
+		if(t < 0) t += MOD;
+		nxt[tot] = head[t];
+		num[tot] = tmp;
+		head[t] = tot ++;
+	}
+	void ins(LL tmp){
+		if(find(tmp)) return ;
+		qins(tmp);
+	}
+}map;
