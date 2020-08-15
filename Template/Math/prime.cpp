@@ -18,7 +18,7 @@ void prime_init(){
 	memset(is_not_prime, 0, sizeof(is_not_prime));
 	for(int i = 2; i < prime_kN; i++){
 		if(!is_not_prime[i]) prime[prime_tot ++] = i;//把质数存起来 
-		for(int j = 0; j < prime_tot && i * prime[j] < N; j++){
+		for(int j = 0; j < prime_tot && i * prime[j] < prime_kN; j++){
 			is_not_prime[i * prime[j]] = 1;
 			if(i % prime[j] == 0) break;//保证每个合数被它最小的质因数筛去 
 		}
